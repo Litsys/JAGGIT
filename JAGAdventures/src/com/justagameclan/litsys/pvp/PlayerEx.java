@@ -11,9 +11,12 @@ public class PlayerEx {
 	private double damage = 0;
 	private String Team = null;
 	private Player p;
+	public Money personalMoney = new Money();
+	public Money bankMoney = new Money();
 
 	public PlayerEx(Player playerEntity) {
 		this.p = playerEntity;
+		this.bankMoney.setBank(true);
 	}
 			
 	public void addKill() {

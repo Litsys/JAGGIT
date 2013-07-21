@@ -326,6 +326,20 @@ public class playerListener implements Listener {
 					e.printStackTrace();
 				}
 			}
+			if (PlayerDeadee.personalMoney.getMoney() < 5) {
+				double amt = PlayerDeadee.personalMoney.getMoney();
+				PlayerKiller.personalMoney.addMoney(amt);
+				PlayerDeadee.personalMoney.setMoney(0);
+				PlayerKiller.getPlayerEntity().sendMessage(ChatColor.WHITE + "You have Earned " + ChatColor.GREEN + amt + ChatColor.WHITE + " GP for that kill");
+				PlayerDeadee.getPlayerEntity().sendMessage(ChatColor.WHITE + "You have Lost " + ChatColor.GREEN + amt + ChatColor.WHITE + " GP for that death");
+			}
+			else
+			{
+				PlayerDeadee.personalMoney.subMoney(5);
+				PlayerKiller.personalMoney.addMoney(5);
+				PlayerKiller.getPlayerEntity().sendMessage(ChatColor.WHITE + "You have Earned " + ChatColor.GREEN + "5" + ChatColor.WHITE + " GP for that kill");
+				PlayerDeadee.getPlayerEntity().sendMessage(ChatColor.WHITE + "You have Lost " + ChatColor.GREEN + "5" + ChatColor.WHITE + " GP for that death");
+			}
 			if (PlayerKiller.getStreak() >= 24) {
 				Bukkit.broadcastMessage(ChatColor.RED + Killer + ChatColor.WHITE + " - " + ChatColor.GREEN + "God Like! " + ChatColor.DARK_PURPLE + "(" + PlayerKiller.getStreak() + " Kill Streak)");
 			}
