@@ -132,6 +132,29 @@ public class pvp extends JavaPlugin {
 				return true;
 			}
 		}
+		else if (cmd.getName().equalsIgnoreCase("weaponDrop")) {
+			if (args.length == 0) {
+				Weapon weapon = new Weapon();
+				Player rPlayer = (Player) sender;
+				rPlayer.getWorld().dropItem(rPlayer.getLocation(), weapon.getItem());
+			} else {
+				sender.sendMessage(ChatColor.RED + "Error: No arguments required!");
+			}
+		}
+		else if (cmd.getName().equalsIgnoreCase("money")) {
+			if (args.length == 1)
+			{
+				if (this.PVPPlayers.containsKey(args[0]))
+				{
+					PlayerEx PlayerEx = this.PVPPlayers.get(args[0]);
+					sender.sendMessage(ChatColor.WHITE + "Player " + PlayerEx.getPlayerEntity().getName() + " has " + PlayerEx.personalMoney.getMoney() + " GP");
+				}
+
+			}
+			else {
+				sender.sendMessage(ChatColor.RED + "Error: please complete the full command!, make sure you have just the username after!");
+			}
+		}
 		else if (cmd.getName().equalsIgnoreCase("team")) {
 			if (args.length < 1) {
 				sender.sendMessage(ChatColor.RED + "Error: please complete the full command!");
