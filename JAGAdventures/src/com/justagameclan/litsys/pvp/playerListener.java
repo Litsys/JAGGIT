@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -20,6 +22,7 @@ import org.bukkit.entity.ThrownPotion;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 //import org.bukkit.event.block.Action;
@@ -52,6 +55,29 @@ public class playerListener implements Listener {
 			Bukkit.broadcastMessage("A Player is getting close to the dungeon");
 			player.sendMessage("You're getting close to the dungeon!");
 			plugin.announceTrigger = 1;
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerOpen(PlayerInteractEvent event) {
+		Player p = event.getPlayer();
+		Action action = event.getAction();
+		if (action.equals(Action.RIGHT_CLICK_BLOCK)) {
+			if (event.getClickedBlock().getType() == Material.CHEST) {
+				Chest Chest = (Chest)event.getClickedBlock().getState();
+				ArrayList<Dungeon> dungeons = DungeonControl.dungeons;
+				for(Dungeon dungeon : dungeons ){
+					ArrayList<Chest> dungeonChests = dungeon.chests;
+					for (Chest chest : dungeonChests) {
+						if (Chest == chest) {
+							PlayerEx PlayerEx = plugin.PVPPlayers.get(event.getPlayer().getName());
+							double foundMoney = Math.floor(1000 / dungeon.dungeonRarityInt);
+							PlayerEx.personalMoney.addMoney(foundMoney);
+							p.sendMessage(ChatColor.WHITE + "You have found " + ChatColor.GOLD + foundMoney + ChatColor.WHITE + " GP!");
+						}
+					}
+				}
+			}
 		}
 	}
 	/*

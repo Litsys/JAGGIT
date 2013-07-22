@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
@@ -25,7 +26,8 @@ import com.sk89q.worldedit.schematic.SchematicFormat;
 public class DungeonControl extends ChunkGenerator{
 	public Map<CuboidClipboard, LinkedList<BlockState>> blocks = new HashMap<CuboidClipboard, LinkedList<BlockState>>();
 	private static pvp plugin;
-	private Dungeon dungeon;
+	public static ArrayList<Dungeon> dungeons;
+	public Dungeon dungeon;
 	//private CraftChest[] chests;
 	
 	public DungeonControl(pvp instance) {
@@ -36,9 +38,11 @@ public class DungeonControl extends ChunkGenerator{
 		if (dungeon != null)
 		{
 			deSpawnDungeon();
+			DungeonControl.dungeons.remove(0);
 		}
 		try {
 			this.dungeon = createDungeon();
+			DungeonControl.dungeons.add(dungeon);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -280,5 +284,9 @@ public class DungeonControl extends ChunkGenerator{
 		}
 		return returnItemStack;
 		
-	}	
+	}
+	
+	public ArrayList<Dungeon> getDungeons() {
+		return DungeonControl.dungeons;
+	}
 }
