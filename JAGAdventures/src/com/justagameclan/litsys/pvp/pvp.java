@@ -45,39 +45,25 @@ public class pvp extends JavaPlugin {
 		//Better check...
 		File StructureLocation = new File (this.getDataFolder()+"/structures");
 		File StatisticLocation = new File (this.getDataFolder()+"/statistics");
-		System.out.println(StructureLocation);
-		System.out.println(StatisticLocation);
-		System.out.println("Files Set up");
 		if (!StructureLocation.exists()) {
 			StructureLocation.mkdir();
-			System.out.println("Created Structure Folder");
 		} else if (!StatisticLocation.exists()) {
 			StatisticLocation.mkdir();
-			System.out.println("Created Statistic Folder");
 		}
 		//Load Structures..
 		this.structures = StructureLocation.listFiles();
-		System.out.println("Got a List of Structures");
 		//Load Statistics..
 		//RecordKillsFile = new File (StatisticLocation+"/RecordKills.db");
 		//RecordStreakFile = new File (StatisticLocation+"/RecordStreak.db");
 		RecordsFile = new File(StatisticLocation+"/Records.db");
-		System.out.println("Files Set Up for Records");
 		if (!RecordsFile.exists()) {
 			try {
-				System.out.println("Creating New Records File");
 				RecordsFile.createNewFile();
-				System.out.println("File Created!");
 				this.RecordKills = new RecordKeeping("Kill", "null", 0);
-				System.out.println("Initilized Kills");
 				this.RecordStreak = new RecordKeeping("Streak", "null", 0);
-				System.out.println("Initilized Streaks");
 				this.Records.add(RecordKills);
-				System.out.println("Starting to track kills");
 				this.Records.add(RecordStreak);
-				System.out.println("Starting to track streak");
 				SLAPI.save(Records, this.RecordsFile.toString());
-				System.out.println("updating statistic database");
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
@@ -86,14 +72,11 @@ public class pvp extends JavaPlugin {
 		} else {
 			try {
 				this.Records = (ArrayList<RecordKeeping>) SLAPI.load(RecordsFile.toString());
-				System.out.println(13);
 				for (RecordKeeping recordItem : Records) {
 					if (recordItem.getRecordType() == "Kill") {
 						this.RecordKills = recordItem;
-						System.out.println(14);
 					} else if (recordItem.getRecordType() == "Streak") {
 						this.RecordStreak = recordItem;
-						System.out.println(15);
 					}
 				}
 			} catch (Exception e) {

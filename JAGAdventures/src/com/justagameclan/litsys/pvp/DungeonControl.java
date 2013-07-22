@@ -264,6 +264,7 @@ public class DungeonControl extends ChunkGenerator{
 		ItemDraw.add(30, Material.OBSIDIAN);
 		ItemDraw.add(30, Material.NETHER_WARTS);
 		ItemDraw.add(10, Material.DIAMOND_SWORD);
+		ItemDraw.add(10, Material.DIAMOND_AXE);
 		ItemDraw.add(10, Material.DIAMOND);
 		ItemDraw.add(10, Material.DIAMOND_PICKAXE);
 		ItemDraw.add(10, Material.BLAZE_POWDER);
@@ -279,6 +280,15 @@ public class DungeonControl extends ChunkGenerator{
 		if (DrawnItem.equals(Material.ARROW))
 		{
 			returnItemStack = new ItemStack(DrawnItem, 10);
+		} else if (DrawnItem.equals(Material.DIAMOND_SWORD) || DrawnItem.equals(Material.DIAMOND_AXE)) { // This Weapon may be something Special!!
+			boolean isSpecial = new Random().nextBoolean();
+			if (isSpecial) { // You're special!
+				System.out.println("A special weapon has been spawned in the world!"); // For development purposes
+				Weapon weapon = new Weapon();
+				returnItemStack = new ItemStack(weapon.getItem());
+			} else { // proceed with regular item
+				returnItemStack = new ItemStack(DrawnItem);
+			}
 		} else {
 			returnItemStack = new ItemStack(DrawnItem);
 		}
