@@ -64,16 +64,22 @@ public class playerListener implements Listener {
 		Action action = event.getAction();
 		if (action.equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (event.getClickedBlock().getType() == Material.CHEST) {
-				Chest Chest = (Chest)event.getClickedBlock().getState();
-				ArrayList<Dungeon> dungeons = DungeonControl.dungeons;
+				Chest ClickedChest = (Chest)event.getClickedBlock().getState();
+				ArrayList<Dungeon> dungeons = plugin.dungeons;
 				for(Dungeon dungeon : dungeons ){
 					ArrayList<Chest> dungeonChests = dungeon.chests;
-					for (Chest chest : dungeonChests) {
-						if (Chest == chest) {
-							PlayerEx PlayerEx = plugin.PVPPlayers.get(event.getPlayer().getName());
-							double foundMoney = Math.floor(1000 / dungeon.dungeonRarityInt);
-							PlayerEx.personalMoney.addMoney(foundMoney);
-							p.sendMessage(ChatColor.WHITE + "You have found " + ChatColor.GOLD + foundMoney + ChatColor.WHITE + " GP!");
+					for (Chest dungeonChest : dungeonChests) {
+						if (ClickedChest.equals(dungeonChest)) {
+							if (dungeon.finished == false) {
+								PlayerEx PlayerEx = plugin.PVPPlayers.get(event.getPlayer().getName());
+								double foundMoney = Math.floor(1000 / dungeon.dungeonRarityInt);
+								PlayerEx.personalMoney.addMoney(foundMoney);
+								p.sendMessage(ChatColor.WHITE + "You have found " + ChatColor.GOLD + foundMoney + ChatColor.WHITE + " GP!");
+								dungeon.setFinished();
+							} else {
+								p.sendMessage(ChatColor.WHITE + "The Chest contains no more GP");
+							}
+
 						}
 					}
 				}

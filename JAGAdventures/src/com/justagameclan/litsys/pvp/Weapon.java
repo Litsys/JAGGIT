@@ -1,9 +1,10 @@
 package com.justagameclan.litsys.pvp;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-import org.bukkit.Color;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,10 +14,13 @@ public class Weapon {
 	private String name;
 	private double damage;
 	private ArrayList<Enchantment> Enchantments;
-	private Color rarity;
+	private ChatColor rarity;
 	private ItemStack item;
 	private ItemMeta itemMeta;
-	private String[] WeaponNames = new String[] { "Strurad","Darver","Vaetper","Taiash","Quaughim","Er'ran","Keshy",
+	private String[] manufacturers = { "Craftech", "Miner Co.", "Silver Zombie Systems", "Terrestrial Inc", "Mojave" };
+	private String[] swordSynonyms = { "blade", "brand", "broadsword", "claymore", "cutlass", "dagger", "glaive", "rapier", "sabre", "scimitar" };
+	private String[] axeSynonyms = { "chopper", "hatchet", "tomahawk", "axe" };
+ 	private String[] WeaponNames = new String[] { "Strurad","Darver","Vaetper","Taiash","Quaughim","Er'ran","Keshy",
 											"Shyque","Tirak","Hihyl","Teand","Necex","Ardw","Enangwar","Imss",
 											"Tanbqua","Morenthver","Latherusk","Sulss","Omnal","Bimer","Adann",
 											"Vanus","Casayom","Quekinet","Sorat","Athshy","Tretorat","Im'hon",
@@ -47,24 +51,52 @@ public class Weapon {
 											"Kim-ryn","Ithery","Quyenath","Enementh","Ackale","Oldiss","Caruca","Darkimine",
 											"Hinssul","Nied","Sam'iae","Itradina","Etcha","Theroughy","Garildingnysy","Aro",
 											"Phoeghcha","Chaskim","Dankim","Ghalore","Engvor","Deldan" };
-	private ItemStack[] WeaponItems = new ItemStack[] { new ItemStack(Material.DIAMOND_SWORD, 1), new ItemStack(Material.DIAMOND_AXE, 1) };
+	private Material[] WeaponMaterials = new Material[] { Material.DIAMOND_SWORD, Material.DIAMOND_AXE };
 	
 	public Weapon() {
 		this.name = WeaponNames[new Random().nextInt(WeaponNames.length)];
-		DrawControl<Color> RarityDraw = new DrawControl<Color>();
-		RarityDraw.add(128, Color.WHITE);
-		RarityDraw.add(64, Color.GREEN);
-		RarityDraw.add(32, Color.BLUE);
-		RarityDraw.add(16, Color.PURPLE);
-		RarityDraw.add(8, Color.YELLOW);
-		RarityDraw.add(4, Color.ORANGE);
-		RarityDraw.add(1, Color.AQUA);
+		String Company = manufacturers[new Random().nextInt(manufacturers.length)];
+		System.out.println(name);
+		DrawControl<ChatColor> RarityDraw = new DrawControl<ChatColor>();
+		RarityDraw.add(128, ChatColor.WHITE);
+		RarityDraw.add(64, ChatColor.GREEN);
+		RarityDraw.add(32, ChatColor.BLUE);
+		RarityDraw.add(16, ChatColor.LIGHT_PURPLE);
+		RarityDraw.add(8, ChatColor.YELLOW);
+		RarityDraw.add(4, ChatColor.GOLD);
+		RarityDraw.add(1, ChatColor.AQUA);
 		int modifier = 1;
-		Color DrawnRarity = RarityDraw.next(modifier);
+		ChatColor DrawnRarity = RarityDraw.next(modifier);
 		this.rarity = DrawnRarity;
-		this.item = WeaponItems[new Random().nextInt(WeaponItems.length)];
-		this.itemMeta.setDisplayName(rarity + name);
-		this.item.setItemMeta(itemMeta);
+		System.out.println(rarity);
+		Material WeaponType = WeaponMaterials[new Random().nextInt(WeaponMaterials.length)];
+		String weaponType = "Nothing";
+		if (WeaponType.toString().toLowerCase().contains("sword")) {
+			weaponType = swordSynonyms[new Random().nextInt(swordSynonyms.length)];
+		} else if (WeaponType.toString().toLowerCase().contains("axe")) {
+			weaponType = axeSynonyms[new Random().nextInt(axeSynonyms.length)];
+		}
+		this.item = new ItemStack(WeaponType, 1);
+		
+		this.itemMeta = this.item.getItemMeta();
+		if (this.itemMeta != null){
+			List<String> lore;
+			if (this.itemMeta.hasLore()){
+				lore = this.itemMeta.getLore();
+			}else{
+				lore = new ArrayList<String>();
+			}
+			lore.add("You've got something special!");
+			this.itemMeta.setLore(lore);
+			String displayName;
+			if (this.itemMeta.hasDisplayName()){
+				displayName = this.itemMeta.getDisplayName();
+			} else {
+				displayName = (this.rarity + Company + " " + weaponType);
+			}
+			this.itemMeta.setDisplayName(displayName);
+			this.item.setItemMeta(itemMeta);
+		}
 	}
 	
 	public String getName()
@@ -83,7 +115,7 @@ public class Weapon {
 	}
 	
 	
-	public Color getRarity()
+	public ChatColor getRarity()
 	{
 		return this.rarity;
 	}

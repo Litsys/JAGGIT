@@ -19,14 +19,15 @@ public class pvp extends JavaPlugin {
 	private playerListener playerListener = new playerListener(this);
 	private DungeonControl dungeonControl = new DungeonControl(this);
 	public Location dungeonLocation;
+	public ArrayList<Dungeon> dungeons = new ArrayList<Dungeon>();
 	public File[] structures;
 	public int announceTrigger;
 	public ArrayList<Team> TeamsList = new ArrayList<Team>();
 	
 	//RecordKeeping
 	public ArrayList<RecordKeeping> Records = new ArrayList<RecordKeeping>();
-	public RecordKeeping RecordKills;
-	public RecordKeeping RecordStreak;
+	public RecordKeeping RecordKills = new RecordKeeping("Kill", "null", 0);
+	public RecordKeeping RecordStreak = new RecordKeeping("Streak", "null", 0);
 	public File RecordsFile;
 	public File RecordKillsFile;
 	public File RecordStreakFile;
@@ -120,8 +121,10 @@ public class pvp extends JavaPlugin {
 				Weapon weapon = new Weapon();
 				Player rPlayer = (Player) sender;
 				rPlayer.getWorld().dropItem(rPlayer.getLocation(), weapon.getItem());
+				return true;
 			} else {
 				sender.sendMessage(ChatColor.RED + "Error: No arguments required!");
+				return false;
 			}
 		}
 		else if (cmd.getName().equalsIgnoreCase("money")) {
@@ -131,11 +134,13 @@ public class pvp extends JavaPlugin {
 				{
 					PlayerEx PlayerEx = this.PVPPlayers.get(args[0]);
 					sender.sendMessage(ChatColor.WHITE + "Player " + PlayerEx.getPlayerEntity().getName() + " has " + PlayerEx.personalMoney.getMoney() + " GP");
+					return true;
 				}
 
 			}
 			else {
 				sender.sendMessage(ChatColor.RED + "Error: please complete the full command!, make sure you have just the username after!");
+				return false;
 			}
 		}
 		else if (cmd.getName().equalsIgnoreCase("team")) {

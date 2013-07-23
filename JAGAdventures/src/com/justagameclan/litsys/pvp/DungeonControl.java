@@ -26,7 +26,7 @@ import com.sk89q.worldedit.schematic.SchematicFormat;
 public class DungeonControl extends ChunkGenerator{
 	public Map<CuboidClipboard, LinkedList<BlockState>> blocks = new HashMap<CuboidClipboard, LinkedList<BlockState>>();
 	private static pvp plugin;
-	public static ArrayList<Dungeon> dungeons;
+	//public static ArrayList<Dungeon> dungeons;
 	public Dungeon dungeon;
 	//private CraftChest[] chests;
 	
@@ -38,11 +38,15 @@ public class DungeonControl extends ChunkGenerator{
 		if (dungeon != null)
 		{
 			deSpawnDungeon();
-			DungeonControl.dungeons.remove(0);
+			if (plugin.dungeons != null) {
+				plugin.dungeons.remove(0);	
+			}
 		}
 		try {
 			this.dungeon = createDungeon();
-			DungeonControl.dungeons.add(dungeon);
+			if (this.dungeon != null) {
+				plugin.dungeons.add(dungeon);	
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -136,9 +140,9 @@ public class DungeonControl extends ChunkGenerator{
 		Random generator = new Random();
 		// Above Ground Search
 		if (dungeon.getDungeonType().equalsIgnoreCase("aboveground")) {
-			int x = generator.nextInt(10000)-5000;
+			int x = generator.nextInt(1000)-500;
 			int y = 63;
-			int z = generator.nextInt(10000)-5000;
+			int z = generator.nextInt(1000)-500;
 			Block startPoint = Bukkit.getWorld("world").getBlockAt(x,y,z);
 			while (!startPoint.isEmpty())
 			{
@@ -164,18 +168,18 @@ public class DungeonControl extends ChunkGenerator{
 		}
 		// Sky Search
 		else if (dungeon.getDungeonType().equalsIgnoreCase("sky")) {
-			int x = generator.nextInt(10000)-5000;
+			int x = generator.nextInt(1000)-500;
 			int y = 128;
-			int z = generator.nextInt(10000)-5000;
+			int z = generator.nextInt(1000)-500;
 			Block startPoint = Bukkit.getWorld("world").getBlockAt(x,y,z);
 			//future checks here
 			dungeon.setLocation(startPoint.getLocation());
 		}
 		// Underground 
 		else {
-			int x = generator.nextInt(10000)-5000;
+			int x = generator.nextInt(1000)-500;
 			int y = 30;
-			int z = generator.nextInt(10000)-5000;
+			int z = generator.nextInt(1000)-500;
 			int addY = dungeon.getDungeonBlocks().getHeight();
 			Block startPoint = Bukkit.getWorld("world").getBlockAt(x, y+addY, z);
 			while (startPoint.isEmpty() || startPoint.isLiquid()) {
@@ -297,6 +301,6 @@ public class DungeonControl extends ChunkGenerator{
 	}
 	
 	public ArrayList<Dungeon> getDungeons() {
-		return DungeonControl.dungeons;
+		return plugin.dungeons;
 	}
 }

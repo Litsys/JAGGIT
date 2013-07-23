@@ -1,0 +1,28 @@
+author: Litsys
+database: false
+description: JAGs custom PVP plugin
+generator: http://dinnerbone.com/minecraft/tools/pluginator/
+main: com.justagameclan.litsys.pvp.pvp
+name: JAG PVP
+startup: postworld
+url: http://justagameclan.com/
+version: '1.0'
+depend: [WorldEdit]
+commands:
+  weaponDrop:
+    usage: /<command>
+  money:
+    usage: /<command> USERNAME
+  schematic:
+    usage: /<command> .schematic file
+  undodungeon:
+    usage: /<command>
+  team:
+    usage: | 
+      /<command> [Options Parameter1 Parameter2]
+      Example: /<command> create TEAMNAME
+      Example: /<command> delete TEAMNAME
+      Example: /<command> add MEMBER TEAMNAME
+      Example: /<command> remove MEMBER TEAMNAME
+      Example: /<command> list
+      Example: /<command> listmember TEAMNAME

@@ -13,6 +13,7 @@ public class Dungeon {
 	public int dungeonRarityInt;
 	public CuboidClipboard dungeonBlocks;
 	public String dungeonType;
+	public boolean finished;
 	
 	public Dungeon(String dungeonRarity, int dungeonRarityInt, CuboidClipboard dungeonBlocks, String dungeonType)
 	{
@@ -40,6 +41,10 @@ public class Dungeon {
 	
 	public ArrayList<Chest> getChests() {
 		return this.chests;
+	}
+	
+	public void setFinished() {
+		this.finished = true;
 	}
 	
 	public String getDungeonRarity() {
