@@ -18,8 +18,8 @@ public class Weapon {
 	private ItemStack item;
 	private ItemMeta itemMeta;
 	private String[] manufacturers = { "Craftech", "Miner Co.", "Silver Zombie Systems", "Terrestrial Inc", "Mojave" };
-	private String[] swordSynonyms = { "blade", "brand", "broadsword", "claymore", "cutlass", "dagger", "glaive", "rapier", "sabre", "scimitar" };
-	private String[] axeSynonyms = { "chopper", "hatchet", "tomahawk", "axe" };
+	private String[] swordSynonyms = { "Blade", "Brand", "Broadsword", "Claymore", "Cutlass", "Dagger", "Glaive", "Rapier", "Sabre", "Scimitar" };
+	private String[] axeSynonyms = { "Chopper", "Hatchet", "Tomahawk", "Axe" };
  	private String[] WeaponNames = new String[] { "Strurad","Darver","Vaetper","Taiash","Quaughim","Er'ran","Keshy",
 											"Shyque","Tirak","Hihyl","Teand","Necex","Ardw","Enangwar","Imss",
 											"Tanbqua","Morenthver","Latherusk","Sulss","Omnal","Bimer","Adann",
@@ -51,7 +51,7 @@ public class Weapon {
 											"Kim-ryn","Ithery","Quyenath","Enementh","Ackale","Oldiss","Caruca","Darkimine",
 											"Hinssul","Nied","Sam'iae","Itradina","Etcha","Theroughy","Garildingnysy","Aro",
 											"Phoeghcha","Chaskim","Dankim","Ghalore","Engvor","Deldan" };
-	private Material[] WeaponMaterials = new Material[] { Material.DIAMOND_SWORD, Material.DIAMOND_AXE };
+	private Material[] WeaponMaterials = new Material[] { Material.DIAMOND_SWORD, Material.DIAMOND_AXE, Material.BLAZE_ROD };
 	
 	public Weapon() {
 		this.name = WeaponNames[new Random().nextInt(WeaponNames.length)];
@@ -75,6 +75,10 @@ public class Weapon {
 			weaponType = swordSynonyms[new Random().nextInt(swordSynonyms.length)];
 		} else if (WeaponType.toString().toLowerCase().contains("axe")) {
 			weaponType = axeSynonyms[new Random().nextInt(axeSynonyms.length)];
+		} else if (WeaponType.toString().toLowerCase().contains("rod")) {
+			weaponType = "Wand";
+			// other wand magic ... see what i did there?
+			
 		}
 		this.item = new ItemStack(WeaponType, 1);
 		

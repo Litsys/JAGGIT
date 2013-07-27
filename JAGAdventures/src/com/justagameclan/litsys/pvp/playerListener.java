@@ -7,6 +7,9 @@ import java.util.ArrayList;
 //import java.io.ObjectOutputStream;
 //import java.util.Map.Entry;
 
+
+
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -28,6 +31,9 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 //import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
 
 //import com.sk89q.worldedit.CuboidClipboard;
 
@@ -61,6 +67,9 @@ public class playerListener implements Listener {
 	@EventHandler
 	public void onPlayerOpen(PlayerInteractEvent event) {
 		Player p = event.getPlayer();
+		Scoreboard scoreboard = plugin.ScoreboardManager.getMainScoreboard();
+		Objective money = scoreboard.getObjective("Money");
+		Score score = money.getScore(p);
 		Action action = event.getAction();
 		if (action.equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (event.getClickedBlock().getType() == Material.CHEST) {
@@ -74,6 +83,8 @@ public class playerListener implements Listener {
 								PlayerEx PlayerEx = plugin.PVPPlayers.get(event.getPlayer().getName());
 								double foundMoney = Math.floor(1000 / dungeon.dungeonRarityInt);
 								PlayerEx.personalMoney.addMoney(foundMoney);
+								int moneyTotal = (int) PlayerEx.personalMoney.getMoney();
+								score.setScore(moneyTotal);
 								p.sendMessage(ChatColor.WHITE + "You have found " + ChatColor.GOLD + foundMoney + ChatColor.WHITE + " GP!");
 								dungeon.setFinished();
 							} else {
