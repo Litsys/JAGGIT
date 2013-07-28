@@ -1,25 +1,25 @@
 package com.justagameclan.litsys.pvp;
 
 public class Money {
-	public double value = 0;
+	public int value = 0;
 	public boolean isBank = false;
 	
-	public void setMoney(double value)
+	public void setMoney(int value)
 	{
 		this.value = value;
 	}
 	
-	public double getMoney()
+	public int getMoney()
 	{
 		return this.value;
 	}
 	
-	public void addMoney(double amt)
+	public void addMoney(int amt)
 	{
 		this.value = this.value + amt;
 	}
 	
-	public void subMoney(double amt)
+	public void subMoney(int amt)
 	{
 		this.value = this.value - amt;
 	}

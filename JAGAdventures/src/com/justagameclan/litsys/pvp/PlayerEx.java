@@ -1,9 +1,12 @@
 package com.justagameclan.litsys.pvp;
 
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
 
 public class PlayerEx {
-
 	private int kills = 0;
 	private int killStreak = 0;
 	private int deaths = 0;
@@ -13,14 +16,39 @@ public class PlayerEx {
 	private Player p;
 	public Money personalMoney = new Money();
 	public Money bankMoney = new Money();
+	public Scoreboard Scoreboard;
+	public Score Money;
+	public Score Kills;
+	public Score KillStreak;
+	public Score Deaths;
+	public Score DeathStreak;
+	public Score Assists;
 
+	
 	public PlayerEx(Player playerEntity) {
 		this.p = playerEntity;
-		this.bankMoney.setBank(true);
+		//this.bankMoney.setBank(true);
 	}
-			
+		
+	public void initializeScore() {
+		Score score = plugin.money.getScore(PlayerEx.getPlayerEntity());
+		Objective money = board.registerNewObjective("Money", "dummy");
+		money.setDisplaySlot(DisplaySlot.SIDEBAR);
+		money.setDisplayName("Money");
+		score.setScore(0)
+	}
+	
+	
 	public void addKill() {
 		this.kills++;
+	}
+	
+	public void setScoreboard(Scoreboard sb) {
+		this.Scoreboard = sb;
+	}
+	
+	public Scoreboard getScoreboard() {
+		return this.Scoreboard;
 	}
 	
 	public void clearKills() {

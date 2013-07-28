@@ -14,9 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
 public class pvp extends JavaPlugin {
@@ -24,10 +22,11 @@ public class pvp extends JavaPlugin {
 	private DungeonControl dungeonControl = new DungeonControl(this);
 	public Location dungeonLocation;
 	public ArrayList<Dungeon> dungeons = new ArrayList<Dungeon>();
+	public ScoreboardManager ScoreboardManager;
+	public Objective money;
 	public File[] structures;
 	public int announceTrigger;
 	public ArrayList<Team> TeamsList = new ArrayList<Team>();
-	public ScoreboardManager ScoreboardManager = Bukkit.getScoreboardManager();
 	
 	//RecordKeeping
 	public ArrayList<RecordKeeping> Records = new ArrayList<RecordKeeping>();
@@ -46,11 +45,10 @@ public class pvp extends JavaPlugin {
 	public void onEnable(){
 		getLogger().info("[J.A.G] PVP  has been enabled!");
 		PluginManager pm = getServer().getPluginManager();
-		Scoreboard board = ScoreboardManager.getNewScoreboard();
-		Objective money = board.registerNewObjective("Money", "dummy");
-		money.setDisplaySlot(DisplaySlot.SIDEBAR);
-		money.setDisplayName("Money");
 		pm.registerEvents(this.playerListener, this);
+		@SuppressWarnings("unused")
+		ScoreboardManager ScoreboardManager = Bukkit.getScoreboardManager();
+		
 		this.dungeonLocation = null;
 		//Better check...
 		File StructureLocation = new File (this.getDataFolder()+"/structures");

@@ -1130,9 +1130,8 @@ public class PVPPlayer implements Player {
 		getP().giveExpLevels(amount);
 	}
 
-	@Override
 	public boolean isScaledHealth() {
-		return getP().isScaledHealth();
+		return ((PVPPlayer) getP()).isScaledHealth();
 	}
 
 	@Override
@@ -1161,9 +1160,8 @@ public class PVPPlayer implements Player {
 		getP().setPlayerWeather(type);
 	}
 
-	@Override
 	public void setScaleHealth(boolean arg0) {
-		getP().setScaleHealth(arg0);
+		((PVPPlayer) getP()).setScaleHealth(arg0);
 	}
 
 	@Override
@@ -1249,5 +1247,29 @@ public class PVPPlayer implements Player {
 	@Override
 	public boolean isOnGround() {
 		return getP().isOnGround();
+	}
+
+	@Override
+	public double getHealthScale() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isHealthScaled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setHealthScale(double arg0) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setHealthScaled(boolean arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

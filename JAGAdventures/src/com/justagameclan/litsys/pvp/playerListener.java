@@ -10,6 +10,9 @@ import java.util.ArrayList;
 
 
 
+
+
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -31,6 +34,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 //import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
@@ -46,9 +50,7 @@ public class playerListener implements Listener {
 	public playerListener(pvp instance) {
 		plugin = instance;
 	}
-	public File saveStatDir;
-
-	
+	public File saveStatDir;	
 	
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event){
@@ -67,9 +69,8 @@ public class playerListener implements Listener {
 	@EventHandler
 	public void onPlayerOpen(PlayerInteractEvent event) {
 		Player p = event.getPlayer();
-		Scoreboard scoreboard = plugin.ScoreboardManager.getMainScoreboard();
-		Objective money = scoreboard.getObjective("Money");
-		Score score = money.getScore(p);
+
+		
 		Action action = event.getAction();
 		if (action.equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (event.getClickedBlock().getType() == Material.CHEST) {
@@ -81,7 +82,7 @@ public class playerListener implements Listener {
 						if (ClickedChest.equals(dungeonChest)) {
 							if (dungeon.finished == false) {
 								PlayerEx PlayerEx = plugin.PVPPlayers.get(event.getPlayer().getName());
-								double foundMoney = Math.floor(1000 / dungeon.dungeonRarityInt);
+								int foundMoney = (int) Math.floor(1000 / dungeon.dungeonRarityInt);
 								PlayerEx.personalMoney.addMoney(foundMoney);
 								int moneyTotal = (int) PlayerEx.personalMoney.getMoney();
 								score.setScore(moneyTotal);
@@ -131,13 +132,35 @@ public class playerListener implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event){
 		PlayerEx PlayerEx = null;
+		Scoreboard board = plugin.ScoreboardManager.getNewScoreboard();
+
 		if (!plugin.PVPPlayers.containsKey(event.getPlayer().getName())) {
 			//PVPPlayer = new PVPPlayer(event.getPlayer());
 			PlayerEx = new PlayerEx(event.getPlayer());
+			PlayerEx.setScoreboard(board);
 			plugin.PVPPlayers.put(event.getPlayer().getName(), PlayerEx);
+			
+			PlayerEx.getPlayerEntity().setScoreboard(board);
+			Score score = plugin.money.getScore(PlayerEx.getPlayerEntity());
+			Objective money = board.registerNewObjective("Money", "dummy");
+			money.setDisplaySlot(DisplaySlot.SIDEBAR);
+			money.setDisplayName("Money");
+			score.setScore(0);
+			
 		} else {
 			PlayerEx = plugin.PVPPlayers.get(event.getPlayer().getName());
+			
+			PlayerEx.getPlayerEntity().setScoreboard(board);
+			Score score = plugin.money.getScore(PlayerEx.getPlayerEntity());
+			Objective money = board.registerNewObjective("Money", "dummy");
+			money.setDisplaySlot(DisplaySlot.SIDEBAR);
+			money.setDisplayName("Money");
+			score.setScore(PlayerEx.personalMoney.getMoney());
+			
 		}
+		
+
+		
 		int activeKills = 0;
 		String activeKillsPlayer = null;
 		int activeStreak = 0;
