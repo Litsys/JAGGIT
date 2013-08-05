@@ -14,16 +14,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.ScoreboardManager;
 
 public class pvp extends JavaPlugin {
 	private playerListener playerListener = new playerListener(this);
 	private DungeonControl dungeonControl = new DungeonControl(this);
 	public Location dungeonLocation;
 	public ArrayList<Dungeon> dungeons = new ArrayList<Dungeon>();
-	public ScoreboardManager ScoreboardManager;
-	public Objective money;
 	public File[] structures;
 	public int announceTrigger;
 	public ArrayList<Team> TeamsList = new ArrayList<Team>();
@@ -45,14 +41,13 @@ public class pvp extends JavaPlugin {
 	public void onEnable(){
 		getLogger().info("[J.A.G] PVP  has been enabled!");
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(this.playerListener, this);
-		@SuppressWarnings("unused")
-		ScoreboardManager ScoreboardManager = Bukkit.getScoreboardManager();
-		
+		pm.registerEvents(this.playerListener, this);		
 		this.dungeonLocation = null;
 		//Better check...
 		File StructureLocation = new File (this.getDataFolder()+"/structures");
 		File StatisticLocation = new File (this.getDataFolder()+"/statistics");
+		System.out.println(StructureLocation);
+		System.out.println(StatisticLocation);
 		if (!StructureLocation.exists()) {
 			StructureLocation.mkdir();
 		} else if (!StatisticLocation.exists()) {
@@ -140,7 +135,7 @@ public class pvp extends JavaPlugin {
 				if (this.PVPPlayers.containsKey(args[0]))
 				{
 					PlayerEx PlayerEx = this.PVPPlayers.get(args[0]);
-					sender.sendMessage(ChatColor.WHITE + "Player " + PlayerEx.getPlayerEntity().getName() + " has " + PlayerEx.personalMoney.getMoney() + " GP");
+					sender.sendMessage(ChatColor.WHITE + "Player " + PlayerEx.getPlayerEntity().getName() + " has " + PlayerEx.getMoney() + " GP");
 					return true;
 				}
 

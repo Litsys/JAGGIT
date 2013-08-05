@@ -34,10 +34,6 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 //import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
-import org.bukkit.scoreboard.Scoreboard;
 
 //import com.sk89q.worldedit.CuboidClipboard;
 
@@ -83,9 +79,7 @@ public class playerListener implements Listener {
 							if (dungeon.finished == false) {
 								PlayerEx PlayerEx = plugin.PVPPlayers.get(event.getPlayer().getName());
 								int foundMoney = (int) Math.floor(1000 / dungeon.dungeonRarityInt);
-								PlayerEx.personalMoney.addMoney(foundMoney);
-								int moneyTotal = (int) PlayerEx.personalMoney.getMoney();
-								score.setScore(moneyTotal);
+								PlayerEx.addMoney(foundMoney);
 								p.sendMessage(ChatColor.WHITE + "You have found " + ChatColor.GOLD + foundMoney + ChatColor.WHITE + " GP!");
 								dungeon.setFinished();
 							} else {
@@ -132,31 +126,14 @@ public class playerListener implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event){
 		PlayerEx PlayerEx = null;
-		Scoreboard board = plugin.ScoreboardManager.getNewScoreboard();
 
 		if (!plugin.PVPPlayers.containsKey(event.getPlayer().getName())) {
 			//PVPPlayer = new PVPPlayer(event.getPlayer());
 			PlayerEx = new PlayerEx(event.getPlayer());
-			PlayerEx.setScoreboard(board);
 			plugin.PVPPlayers.put(event.getPlayer().getName(), PlayerEx);
 			
-			PlayerEx.getPlayerEntity().setScoreboard(board);
-			Score score = plugin.money.getScore(PlayerEx.getPlayerEntity());
-			Objective money = board.registerNewObjective("Money", "dummy");
-			money.setDisplaySlot(DisplaySlot.SIDEBAR);
-			money.setDisplayName("Money");
-			score.setScore(0);
-			
 		} else {
-			PlayerEx = plugin.PVPPlayers.get(event.getPlayer().getName());
-			
-			PlayerEx.getPlayerEntity().setScoreboard(board);
-			Score score = plugin.money.getScore(PlayerEx.getPlayerEntity());
-			Objective money = board.registerNewObjective("Money", "dummy");
-			money.setDisplaySlot(DisplaySlot.SIDEBAR);
-			money.setDisplayName("Money");
-			score.setScore(PlayerEx.personalMoney.getMoney());
-			
+			PlayerEx = plugin.PVPPlayers.get(event.getPlayer().getName());			
 		}
 		
 
@@ -274,7 +251,8 @@ public class playerListener implements Listener {
 		if (Attacker.getType() != EntityType.PLAYER) return;
 		if (event.getEntityType() != EntityType.PLAYER) return;
 		Player = (Player)event.getEntity();
-		PlayerEx PlayerAttacker = plugin.PVPPlayers.get(Player.getName());
+		PlayerEx PlayerAttackee = plugin.PVPPlayers.get(Player.getName());
+		PlayerEx PlayerAttacker = plugin.PVPPlayers.get(((Player)Attacker).getName());
 		TeammateCheck = (Player)Attacker;
 		for (Team team: plugin.TeamsList) {
 			ArrayList<Player> TeamMembers = team.getTeamMembers();
@@ -289,7 +267,9 @@ public class playerListener implements Listener {
 		if (teamMateExist && playerExist){
 			event.setCancelled(true);
 		} else {
-			PlayerAttacker.addDamage(event.getDamage());
+			PlayerAttacker.addDamage((int) event.getDamage());
+			PlayerAttackee.addDamageRec((int)event.getDamage());
+			PlayerAttackee.addAssistee(PlayerAttacker.getPlayerEntity());
 		}
 	}
 	
@@ -299,6 +279,13 @@ public class playerListener implements Listener {
 		Player KillerCheck = event.getEntity().getKiller();
 		String Deadee = event.getEntity().getName();
 		PlayerEx PlayerDeadee = plugin.PVPPlayers.get(Deadee);
+		if (PlayerDeadee.getAssistee() != null) {
+			ArrayList<Player> Assistees = PlayerDeadee.getAssistee();
+			for (Player p: Assistees) {
+				PlayerEx PlayerEx = plugin.PVPPlayers.get(p.getName());
+				PlayerEx.addAssist();
+			}
+		}
 		if (KillerCheck instanceof Player) {
 			// KD tracking
 			String Killer = KillerCheck.getName();
@@ -311,7 +298,7 @@ public class playerListener implements Listener {
 				Bukkit.broadcastMessage(ChatColor.GOLD + "C-C-C-Combo Breaker! " + ChatColor.WHITE + "- " + ChatColor.RED + Killer + ChatColor.WHITE + " Has broken " + Deadee +"'s Kill streak of " + ChatColor.DARK_PURPLE + BrokenStreak + " Kills");
 			}
 			PlayerDeadee.clearStreak();
-			PlayerDeadee.addDeaths();
+			PlayerDeadee.addDeath();
 			// Team stuff
 			for (Team team: plugin.TeamsList) {
 				ArrayList<Player>MemberList = team.getTeamMembers();
@@ -392,17 +379,17 @@ public class playerListener implements Listener {
 					e.printStackTrace();
 				}
 			}
-			if (PlayerDeadee.personalMoney.getMoney() < 5) {
-				double amt = PlayerDeadee.personalMoney.getMoney();
-				PlayerKiller.personalMoney.addMoney(amt);
-				PlayerDeadee.personalMoney.setMoney(0);
+			if (PlayerDeadee.getMoney() < 5) {
+				int amt = PlayerDeadee.getMoney();
+				PlayerKiller.addMoney(amt);
+				PlayerDeadee.clearMoney();
 				PlayerKiller.getPlayerEntity().sendMessage(ChatColor.WHITE + "You have Earned " + ChatColor.GREEN + amt + ChatColor.WHITE + " GP for that kill");
 				PlayerDeadee.getPlayerEntity().sendMessage(ChatColor.WHITE + "You have Lost " + ChatColor.GREEN + amt + ChatColor.WHITE + " GP for that death");
 			}
 			else
 			{
-				PlayerDeadee.personalMoney.subMoney(5);
-				PlayerKiller.personalMoney.addMoney(5);
+				PlayerDeadee.addMoney(-5);
+				PlayerKiller.addMoney(5);
 				PlayerKiller.getPlayerEntity().sendMessage(ChatColor.WHITE + "You have Earned " + ChatColor.GREEN + "5" + ChatColor.WHITE + " GP for that kill");
 				PlayerDeadee.getPlayerEntity().sendMessage(ChatColor.WHITE + "You have Lost " + ChatColor.GREEN + "5" + ChatColor.WHITE + " GP for that death");
 			}
