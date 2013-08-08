@@ -288,7 +288,7 @@ public class DungeonControl extends ChunkGenerator{
 			boolean isSpecial = new Random().nextBoolean();
 			if (isSpecial) { // You're special!
 				System.out.println("A special weapon has been spawned in the world!"); // For development purposes
-				Weapon weapon = new Weapon();
+				Drop weapon = new Drop();
 				returnItemStack = new ItemStack(weapon.getItem());
 			} else { // proceed with regular item
 				returnItemStack = new ItemStack(DrawnItem);

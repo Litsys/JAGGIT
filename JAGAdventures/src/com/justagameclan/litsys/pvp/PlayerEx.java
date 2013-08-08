@@ -33,6 +33,8 @@ public class PlayerEx {
 	
 	public PlayerEx(Player playerEntity) {
 		this.p = playerEntity;
+		this.p.setScoreboard(this.PrivateBoard);
+		this.p.setScoreboard(this.ViewableBoard);
 		this.obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		this.obj.setDisplayName("Your Statistics:");
 		this.privObj.setDisplaySlot(null);
@@ -122,10 +124,7 @@ public class PlayerEx {
 	
 	public void addMoney(int m) {
 		this.Money.setScore(this.Money.getScore() + m);
-		
-		for (int i = 0; i <= 3; i++) {
-			p.playSound(p.getLocation(), Sound.ORB_PICKUP, (float) 2, (float) 4);
-		}
+		p.playSound(p.getLocation(), Sound.ORB_PICKUP, (float) 2, (float) 4);
 	}
 	
 	public void clearMoney() { 

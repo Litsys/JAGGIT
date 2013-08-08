@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.enchantments.Enchantment;
 
-public class Weapon {
+public class Drop {
 	private String name;
 	private double damage;
 	private ArrayList<Enchantment> Enchantments;
@@ -20,9 +20,10 @@ public class Weapon {
 	private String[] manufacturers = { "Craftech", "Miner Co.", "Silver Zombie Systems", "Terrestrial Inc", "Mojave" };
 	private String[] swordSynonyms = { "Blade", "Brand", "Broadsword", "Claymore", "Cutlass", "Dagger", "Glaive", "Rapier", "Sabre", "Scimitar" };
 	private String[] axeSynonyms = { "Chopper", "Hatchet", "Tomahawk", "Axe" };
+	private String[] wandSynonyms = { "Wand", "Rod" };
 	private Material[] WeaponMaterials = new Material[] { Material.DIAMOND_SWORD, Material.DIAMOND_AXE, Material.BLAZE_ROD };
 	
-	public Weapon() {
+	public Drop() {
 		//this.name = WeaponNames[new Random().nextInt(WeaponNames.length)];
 		String Company = manufacturers[new Random().nextInt(manufacturers.length)];
 		System.out.println(name);
@@ -45,7 +46,7 @@ public class Weapon {
 		} else if (WeaponType.toString().toLowerCase().contains("axe")) {
 			weaponType = axeSynonyms[new Random().nextInt(axeSynonyms.length)];
 		} else if (WeaponType.toString().toLowerCase().contains("rod")) {
-			weaponType = "Wand";
+			weaponType = wandSynonyms[new Random().nextInt(wandSynonyms.length)];
 			// other wand magic ... see what i did there?
 			
 		}
@@ -70,6 +71,26 @@ public class Weapon {
 			this.itemMeta.setDisplayName(displayName);
 			this.item.setItemMeta(itemMeta);
 		}
+	}
+	
+	public void setManufacturers(String[] man)
+	{
+		this.manufacturers = man;
+	}
+	
+	public void setSwordSynonyms(String[] syn)
+	{
+		this.swordSynonyms = syn;
+	}
+	
+	public void setAxeSynonyms(String[] syn)
+	{
+		this.axeSynonyms = syn;
+	}
+	
+	public void setWandSynonyms (String[] syn)
+	{
+		this.wandSynonyms = syn;
 	}
 	
 	public String getName()

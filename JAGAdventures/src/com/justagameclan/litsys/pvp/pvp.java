@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,8 +22,10 @@ public class pvp extends JavaPlugin {
 	public Location dungeonLocation;
 	public ArrayList<Dungeon> dungeons = new ArrayList<Dungeon>();
 	public File[] structures;
+	public File itemConfig;
 	public int announceTrigger;
 	public ArrayList<Team> TeamsList = new ArrayList<Team>();
+	public FileConfiguration config = getConfig();
 	
 	//RecordKeeping
 	public ArrayList<RecordKeeping> Records = new ArrayList<RecordKeeping>();
@@ -44,21 +47,17 @@ public class pvp extends JavaPlugin {
 		pm.registerEvents(this.playerListener, this);		
 		this.dungeonLocation = null;
 		//Better check...
-		File StructureLocation = new File (this.getDataFolder()+"/structures");
-		File StatisticLocation = new File (this.getDataFolder()+"/statistics");
-		System.out.println(StructureLocation);
-		System.out.println(StatisticLocation);
+		File StructureLocation = new File (this.getDataFolder() + File.separator + "structures");
+		File StatisticLocation = new File (this.getDataFolder() + File.separator + "statistics");
 		if (!StructureLocation.exists()) {
-			StructureLocation.mkdir();
+			StructureLocation.mkdirs();
 		} else if (!StatisticLocation.exists()) {
-			StatisticLocation.mkdir();
+			StatisticLocation.mkdirs();
 		}
 		//Load Structures..
 		this.structures = StructureLocation.listFiles();
 		//Load Statistics..
-		//RecordKillsFile = new File (StatisticLocation+"/RecordKills.db");
-		//RecordStreakFile = new File (StatisticLocation+"/RecordStreak.db");
-		RecordsFile = new File(StatisticLocation+"/Records.db");
+		RecordsFile = new File(StatisticLocation + File.separator + "Records.db");
 		if (!RecordsFile.exists()) {
 			try {
 				RecordsFile.createNewFile();
@@ -85,7 +84,13 @@ public class pvp extends JavaPlugin {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}	
+		}
+		this.itemConfig = new File (this.getDataFolder(), "itemdrops.yml");
+		if (!this.itemConfig.exists()) {
+			this.saveResource("itemdrops.yml", true);
+		} else {
+			
+		}
 		//playerListener.loadStats();
 		
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() { 
@@ -120,7 +125,7 @@ public class pvp extends JavaPlugin {
 		}
 		else if (cmd.getName().equalsIgnoreCase("weaponDrop")) {
 			if (args.length == 0) {
-				Weapon weapon = new Weapon();
+				Drop weapon = new Drop();
 				Player rPlayer = (Player) sender;
 				rPlayer.getWorld().dropItem(rPlayer.getLocation(), weapon.getItem());
 				return true;
